@@ -72,4 +72,19 @@ public with sharing class CTPersonController {
         return null;
     }
 
+    /**
+     * Get count of people in each health status
+     * @return Map<String, Integer>
+     */
+    public static Map<String, Integer> getHealthStatusCount(){
+        Map<String, Integer> healthCountMap = new Map<String, Integer>();
+
+        for(AggregateResult result : [SELECT Health_Status__c healthStatus, COUNT(Id) total 
+                                      FROM Person__c 
+                                      GROUP BY Health_Status__c]){
+            healthCountMap.put(String.valueOf(result.get('healthStatus')), Integer.valueOf(result.get('total')));                                    
+        }
+
+        return healthCountMap;
+     }
 }
